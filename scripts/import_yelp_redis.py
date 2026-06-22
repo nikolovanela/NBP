@@ -12,7 +12,7 @@ USER_FILE     = DATA_DIR / "user_subset.jsonl"
 
 
 def get_client():
-    return redis.Redis(host="localhost", port=6380, decode_responses=True)
+    return redis.Redis(host="localhost", port=6379, decode_responses=True)
 
 
 def rset(r, key, value):
@@ -29,7 +29,7 @@ def load_jsonl(path):
 def main():
     r = get_client()
     r.ping()
-    print("Connected to Redis on port 6380.")
+    print("Connected to Redis on port 6379.")
 
     business_reviews   = defaultdict(list)
     user_reviews       = defaultdict(list)

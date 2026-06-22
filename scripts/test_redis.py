@@ -2,7 +2,7 @@ import redis
 import json
 
 def get_client():
-    return redis.Redis(host="localhost", port=6380, decode_responses=True)
+    return redis.Redis(host="localhost", port=6379, decode_responses=True)
 
 def main():
     r = get_client()
