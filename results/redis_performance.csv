@@ -1,0 +1,7 @@
+query,key,runs,avg_ms,min_ms,max_ms
+Get restaurants in city/category,city_category:Philadelphia:Restaurants,100,1.2121,0.8386,2.8693
+Get business by id,business:MTSW4McQd7CbVtyjqoe9mw,100,0.6542,0.5566,1.1785
+Get reviews for business,business_reviews:MTSW4McQd7CbVtyjqoe9mw,100,0.6127,0.5368,1.5698
+Get business statistics,stats:business:MTSW4McQd7CbVtyjqoe9mw,100,0.6045,0.5418,1.5267
+Get review by id,review:BXQcBN0iAi1lAUxibGLFzA,100,0.6787,0.5555,1.5991
+Get user by id,user:6_SpY41LIHZuIaiDs5FMKA,100,0.6937,0.5318,1.9516
