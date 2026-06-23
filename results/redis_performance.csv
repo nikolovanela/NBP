@@ -1,7 +1,11 @@
-query,key,runs,avg_ms,min_ms,max_ms
-Get restaurants in city/category,city_category:Philadelphia:Restaurants,100,1.3731,1.039,14.8241
-Get business by id,business:MTSW4McQd7CbVtyjqoe9mw,100,0.9436,0.7618,1.3292
-Get reviews for business,business_reviews:MTSW4McQd7CbVtyjqoe9mw,100,0.9437,0.7853,1.6803
-Get business statistics,stats:business:MTSW4McQd7CbVtyjqoe9mw,100,0.8885,0.7479,1.3708
-Get review by id,review:BXQcBN0iAi1lAUxibGLFzA,100,0.8814,0.7686,1.3738
-Get user by id,user:6_SpY41LIHZuIaiDs5FMKA,100,0.9639,0.7788,4.1589
+query,runs,avg_ms,min_ms,max_ms
+Q1 – Restaurants in city (simple),100,0.7443,0.4886,1.1538
+Q2 – Business by ID (simple),100,0.6318,0.392,0.9181
+Q3 – Review IDs for business (simple),100,0.613,0.4178,0.8698
+Q4 – Business stats (simple),100,0.6103,0.4152,0.9616
+Q5 – Top reviews for business (complex join),100,2.1327,1.4228,5.6206
+Q6 – User profile + reviews (complex join),100,1.7952,1.282,3.1641
+Q7 – Top businesses by avg stars (aggregated),100,69.3404,50.5937,127.7195
+Q8 – Star distribution for business (aggregated),100,1.979,1.3937,2.8222
+Q9 – Most active reviewers (aggregated),100,35.7643,32.0955,62.6397
+Q10 – Rating-band distribution (aggregated),100,21.9584,18.3148,40.2839

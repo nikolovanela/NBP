@@ -19,17 +19,16 @@ def main():
             rows.append({
                 "database": "Redis",
                 "query":    row["query"],
-                "key":      row["key"],
                 "runs":     row["runs"],
                 "avg_ms":   row["avg_ms"],
                 "min_ms":   row["min_ms"],
-                "max_ms":   row["max_ms"]
+                "max_ms":   row["max_ms"],
             })
 
     with OUTPUT_FILE.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["database", "query", "key", "runs", "avg_ms", "min_ms", "max_ms"]
+            fieldnames=["database", "query", "runs", "avg_ms", "min_ms", "max_ms"]
         )
         writer.writeheader()
         writer.writerows(rows)
