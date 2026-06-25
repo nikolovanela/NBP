@@ -4,7 +4,7 @@ from pathlib import Path
 from collections import defaultdict
 from tqdm import tqdm
 
-DATA_DIR = Path("data/processed")
+DATA_DIR = Path("../data/processed")
 
 BUSINESS_FILE = DATA_DIR / "business_subset.jsonl"
 REVIEW_FILE   = DATA_DIR / "review_subset.jsonl"

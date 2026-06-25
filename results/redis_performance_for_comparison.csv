@@ -1,11 +1,11 @@
 database,query,runs,avg_ms,min_ms,max_ms
-Redis,Q1 – Restaurants in city (simple),100,0.7443,0.4886,1.1538
-Redis,Q2 – Business by ID (simple),100,0.6318,0.392,0.9181
-Redis,Q3 – Review IDs for business (simple),100,0.613,0.4178,0.8698
-Redis,Q4 – Business stats (simple),100,0.6103,0.4152,0.9616
-Redis,Q5 – Top reviews for business (complex join),100,2.1327,1.4228,5.6206
-Redis,Q6 – User profile + reviews (complex join),100,1.7952,1.282,3.1641
-Redis,Q7 – Top businesses by avg stars (aggregated),100,69.3404,50.5937,127.7195
-Redis,Q8 – Star distribution for business (aggregated),100,1.979,1.3937,2.8222
-Redis,Q9 – Most active reviewers (aggregated),100,35.7643,32.0955,62.6397
-Redis,Q10 – Rating-band distribution (aggregated),100,21.9584,18.3148,40.2839
+Redis,Q1 – Restaurants in city (simple),100,0.8345,0.4967,3.4123
+Redis,Q2 – Business by ID (simple),100,0.6088,0.4077,1.16
+Redis,Q3 – Review IDs for business (simple),100,0.6202,0.3987,0.8301
+Redis,Q4 – Business stats (simple),100,0.6145,0.4041,0.9097
+Redis,Q5 – Top reviews for business (complex join),100,2.0411,1.4502,4.9129
+Redis,Q6 – User profile + reviews (complex join),100,1.8119,1.2357,2.9859
+Redis,Q7 – Top businesses by avg stars (aggregated),100,58.4009,50.6757,101.0995
+Redis,Q8 – Star distribution for business (aggregated),100,2.2199,1.6354,3.3111
+Redis,Q9 – Most active reviewers (aggregated),100,35.6167,32.0946,55.8332
+Redis,Q10 – Rating-band distribution (aggregated),100,21.1509,18.7841,31.5843

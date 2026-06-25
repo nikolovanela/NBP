@@ -58,20 +58,15 @@ def main():
     ax.set_ylabel("Average time (ms)", fontsize=10)
     ax.set_title("Redis Performance — Yelp Dataset (100 runs per query)", fontsize=12)
     ax.set_xticks(x)
-    # Short labels for x-axis
-    short = [lbl.split("–")[0].strip() for lbl in labels]
-    ax.set_xticklabels(short, fontsize=8)
+    clean = [
+        lbl.replace(" (simple)", "").replace(" (complex join)", "").replace(" (aggregated)", "")
+        for lbl in labels
+    ]
+    ax.set_xticklabels(clean, fontsize=8, rotation=20, ha="right")
 
-    # Legend
     patches = [mpatches.Patch(color=v, label=k.capitalize())
                for k, v in CATEGORY_COLORS.items()]
     ax.legend(handles=patches, fontsize=9)
-
-    # Full labels as annotation on the right
-    for i, lbl in enumerate(labels):
-        ax.annotate(lbl, xy=(i, 0), xytext=(0, -45),
-                    textcoords="offset points",
-                    ha="center", fontsize=6.5, color="gray", rotation=0)
 
     plt.tight_layout(pad=2)
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)

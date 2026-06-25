@@ -1,17 +1,18 @@
-# Redis Yelp Key-Value Project
+# Key-Value NoSQL — Yelp Dataset (Redis vs Oracle NoSQL)
 
-Redis part of the university Key-Value NoSQL Databases project.  
-Uses the same Yelp dataset subset and the same query scenarios as the Oracle NoSQL team, so results can be directly compared.
+University project comparing the performance of two key-value NoSQL databases — **Redis** and **Oracle NoSQL** — using the Yelp dataset (restaurants in Philadelphia).
 
 ---
 
 ## Technologies
 
-- Docker Desktop
-- Redis (port **6380**)
-- Python 3
-- `redis`, `pandas`, `tqdm`, `matplotlib`
-- Yelp dataset
+| | Redis | Oracle NoSQL |
+|---|---|---|
+| Database | Redis 7 (Docker, port **6379**) | Oracle NoSQL CE (Docker, port **8080**) |
+| SDK | `redis-py` | `borneo 5.4.3` |
+| Scripts | `scripts/redis/` | `scripts/oracle/` |
+
+Common: Python 3, `tqdm`, `matplotlib`, `numpy`, Yelp dataset
 
 ---
 
@@ -21,14 +22,24 @@ Uses the same Yelp dataset subset and the same query scenarios as the Oracle NoS
 redis-yelp/
 │
 ├── scripts/
-│   ├── test_redis.py
-│   ├── prepare_yelp_subset.py       ← same as Oracle team
-│   ├── import_yelp_redis.py
-│   ├── query_redis.py
-│   ├── performance_redis.py
-│   ├── prepare_redis_comparison.py
-│   ├── plot_redis_performance.py
-│   └── plot_comparison.py
+│   ├── redis/
+│   │   ├── test_redis.py
+│   │   ├── prepare_yelp_subset.py
+│   │   ├── import_yelp_redis.py
+│   │   ├── query_redis.py
+│   │   ├── performance_redis.py
+│   │   ├── prepare_redis_comparison.py
+│   │   ├── plot_redis_performance.py
+│   │   └── plot_comparison.py
+│   │
+│   └── oracle/
+│       ├── test_oracle.py
+│       ├── import_yelp_oracle.py
+│       ├── query_oracle.py
+│       ├── performance_oracle.py
+│       ├── prepare_oracle_comparison.py
+│       ├── plot_oracle_performance.py
+│       └── plot_comparison.py
 │
 ├── data/
 │   ├── raw/                         ← place Yelp .json files here
@@ -36,91 +47,57 @@ redis-yelp/
 │
 ├── results/
 │   ├── redis_performance.csv
+│   ├── oracle_performance.csv
 │   ├── redis_performance_for_comparison.csv
-│   ├── oracle_performance_for_comparison.csv   ← from Oracle team
+│   ├── oracle_performance_for_comparison.csv
 │   ├── redis_performance_chart.png
+│   ├── oracle_performance_chart.png
 │   └── comparison_chart.png
 │
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Prerequisites
+## Installation
 
-Install Python packages:
+### 1. Install Python dependencies
 
 ```bash
-pip install redis pandas tqdm matplotlib
+pip install -r requirements.txt
 ```
 
-Check Redis is running:
+### 2. Start Redis (Docker)
+
+```bash
+docker run -d --name redis-db -p 6379:6379 redis:latest
+```
+
+### 3. Start Oracle NoSQL (Docker)
+
+```bash
+docker run -d --name kvlite -p 8080:8080 oracle/nosql:ce bash -c ./start-kvlite.sh
+```
+
+Verify both containers are running:
 
 ```bash
 docker ps
 ```
 
-Redis runs on port **6380**.
-
----
-
-## Step-by-step
-
-### 1. Test the connection
-
-```bash
-python scripts/test_redis.py
-```
-
 Expected output:
 ```
-Redis connection OK.
-Test key written and read back:
-{'message': 'Redis works!'}
-Test key deleted. All good.
+NAMES      STATUS    PORTS
+kvlite     Up        0.0.0.0:8080->8080/tcp
+redis-db   Up        0.0.0.0:6379->6379/tcp
 ```
 
 ---
 
-### 2. Download Yelp dataset
+## Data Model
 
-Download from Kaggle:  
-https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset
-
-Place these 3 files in `data/raw/`:
-
-```
-data/raw/yelp_academic_dataset_business.json
-data/raw/yelp_academic_dataset_review.json
-data/raw/yelp_academic_dataset_user.json
-```
-
----
-
-### 3. Prepare the subset
-
-```bash
-python scripts/prepare_yelp_subset.py
-```
-
-Filters: **Philadelphia** restaurants only. Max 3000 businesses, 50000 reviews.
-
-Output:
-```
-data/processed/business_subset.jsonl
-data/processed/review_subset.jsonl
-data/processed/user_subset.jsonl
-```
-
----
-
-### 4. Import into Redis
-
-```bash
-python scripts/import_yelp_redis.py
-```
-
-This imports all data using the same two-level key-value model as Oracle.
+Both databases use the same two-level key-value model for a fair comparison:
 
 **Level 1 — basic entities:**
 ```
@@ -137,88 +114,106 @@ stats:business:{business_id}
 city_category:Philadelphia:Restaurants
 ```
 
----
-
-### 5. Run query scenarios
-
-```bash
-python scripts/query_redis.py
-```
-
-To save output:
-```bash
-python scripts/query_redis.py | tee results/redis_query_examples.txt
-```
-
-6 scenarios (identical to Oracle team):
-
-1. Get restaurants in Philadelphia
-2. Get business by ID
-3. Get all reviews for a business
-4. Get business statistics
-5. Get review by ID
-6. Get user by ID
+Values are stored as JSON strings in both databases.
 
 ---
+
+## Steps
+
+### 1. Download Yelp dataset
+
+Download from Kaggle: https://www.kaggle.com/datasets/yelp-dataset/yelp-dataset
+
+Place the three files in `data/raw/`:
+```
+yelp_academic_dataset_business.json
+yelp_academic_dataset_review.json
+yelp_academic_dataset_user.json
+```
+
+### 2. Prepare subset
+
+```bash
+python scripts/redis/prepare_yelp_subset.py
+```
+
+Filter: Philadelphia restaurants only, max 3000 businesses / 50000 reviews.
+
+### 3. Test connections
+
+```bash
+python scripts/redis/test_redis.py
+python scripts/oracle/test_oracle.py
+```
+
+### 4. Import data
+
+```bash
+python scripts/redis/import_yelp_redis.py
+python scripts/oracle/import_yelp_oracle.py
+```
+
+### 5. Run queries (demo)
+
+```bash
+python scripts/redis/query_redis.py
+python scripts/oracle/query_oracle.py
+```
 
 ### 6. Measure performance
 
 ```bash
-python scripts/performance_redis.py
+python scripts/redis/performance_redis.py
+python scripts/oracle/performance_oracle.py
 ```
 
-Saves: `results/redis_performance.csv`  
-Each query is measured 100 times.
+Saves: `results/redis_performance.csv` and `results/oracle_performance.csv`
 
----
-
-### 7. Create Redis chart
+### 7. Generate charts
 
 ```bash
-python scripts/plot_redis_performance.py
-```
+# Individual charts
+python scripts/redis/plot_redis_performance.py
+python scripts/oracle/plot_oracle_performance.py
 
-Saves: `results/redis_performance_chart.png`
+# Comparison chart (Redis vs Oracle)
+python scripts/redis/plot_comparison.py
+```
 
 ---
 
-### 8. Prepare comparison CSV
+## Queries (10 scenarios)
 
-```bash
-python scripts/prepare_redis_comparison.py
-```
+Identical for both databases — basis for fair comparison:
 
-Saves: `results/redis_performance_for_comparison.csv`
-
----
-
-### 9. Create Oracle vs Redis comparison chart
-
-Make sure `results/oracle_performance_for_comparison.csv` is present (from Oracle team), then:
-
-```bash
-python scripts/plot_comparison.py
-```
-
-Saves: `results/comparison_chart.png`
+| | Query | Type |
+|---|---|---|
+| Q1 | All restaurants in Philadelphia | Simple |
+| Q2 | Business by ID | Simple |
+| Q3 | Review IDs for a business | Simple |
+| Q4 | Business stats (avg stars, review count) | Simple |
+| Q5 | Top 5 reviews for a business (join) | Complex |
+| Q6 | User profile + their reviews (join) | Complex |
+| Q7 | Top 10 businesses by average rating | Aggregated |
+| Q8 | Star distribution (1–5★) for a business | Aggregated |
+| Q9 | Most active reviewers in the city | Aggregated |
+| Q10 | Business distribution by rating band | Aggregated |
 
 ---
 
-## Key-Value Data Model
+## Results
 
-Redis stores everything as JSON strings (since Redis is a simple key-value store).
+| Query | Redis (avg ms) | Oracle (avg ms) | Redis faster by |
+|---|---|---|---|
+| Q1 Simple | 0.83 | 55.14 | **66×** |
+| Q2 Simple | 0.61 | 45.02 | **74×** |
+| Q3 Simple | 0.62 | 44.92 | **72×** |
+| Q4 Simple | 0.61 | 44.88 | **74×** |
+| Q5 Complex | 2.04 | 2398.98 | **1176×** |
+| Q6 Complex | 1.81 | 133.16 | **74×** |
+| Q7 Aggregated | 58.40 | 133233.92 | **2282×** |
+| Q8 Aggregated | 2.22 | 2373.51 | **1069×** |
+| Q9 Aggregated | 35.62 | 156646.88 | **4398×** |
+| Q10 Aggregated | 21.15 | 133543.71 | **6314×** |
 
-```python
-r.set("business:MTSW4McQd7CbVtyjqoe9mw", json.dumps({ ... }))
-value = json.loads(r.get("business:MTSW4McQd7CbVtyjqoe9mw"))
-```
-
-This mirrors the Oracle NoSQL model exactly, making performance comparison valid.
-
----
-
-## Notes
-
-- Redis runs on port **6380** (not default 6379, because an older version occupies 6379).
-- Raw Yelp data is not committed to git (too large).
-- `data/raw/` and `data/processed/` are in `.gitignore`.
+**Main reason:** Redis uses pipelining (all GET requests are sent at once in a single round-trip), while Oracle NoSQL has no pipeline — each GET is a separate HTTP round-trip (~45 ms latency).

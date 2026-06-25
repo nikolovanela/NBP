@@ -1,0 +1,11 @@
+query,runs,avg_ms,min_ms,max_ms
+Q1 – Restaurants in city (simple),100,55.1449,49.0011,66.5585
+Q2 – Business by ID (simple),100,45.0209,41.0812,49.0371
+Q3 – Review IDs for business (simple),100,44.9197,41.3783,47.6141
+Q4 – Business stats (simple),100,44.8794,41.2339,47.5726
+Q5 – Top reviews for business (complex join),10,2398.9784,2351.7988,2497.3338
+Q6 – User profile + reviews (complex join),100,133.1583,124.7676,139.751
+Q7 – Top businesses by avg stars (aggregated),5,133233.9194,132553.9195,133632.7894
+Q8 – Star distribution for business (aggregated),10,2373.5149,2328.3439,2455.682
+Q9 – Most active reviewers (aggregated),5,156646.8848,155853.0428,157451.2823
+Q10 – Rating-band distribution (aggregated),5,133543.708,133298.4495,133787.0987

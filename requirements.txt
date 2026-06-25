@@ -1,0 +1,6 @@
+redis
+borneo==5.4.3
+tqdm
+matplotlib
+numpy
+
